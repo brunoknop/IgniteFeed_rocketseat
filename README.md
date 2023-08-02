@@ -19,7 +19,7 @@ Este projeto é o front-end de um feed de comentários e é o objeto de estudo d
 ## 🚀 Tecnologias
 Esse projeto foi desenvolvido com as seguintes tecnologias:
 - React
-- Vite
+- [Vite](https://vitejs.dev)
 
 ## 🔖 Layout
 Você pode visualizar o layout do projeto através [DESSE LINK](https://www.figma.com/community/file/1113573231685349036). É necessário ter conta no [Figma](https://www.figma.com/) para acessá-lo.
