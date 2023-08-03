@@ -3,6 +3,37 @@ import { Post } from "./modules/Post";
 import style from './App.module.css';
 import { Sidebar } from "./modules/Sidebar";
 
+const posts = [
+  {
+    id: 1,
+    author: {
+      avatarUrl: 'https://github.com/brunoknop.png',
+      name: 'Bruno Knop',
+      role: 'Front-end developer'
+    },
+    content: [
+      {type: 'paragraph', content: 'Fala galeraa 👋'},
+      {type: 'paragraph', content: 'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀'},
+      {type: 'link', content: '👉 jane.design/doctorcare'}
+    ],
+    publishAt: new Date('2023-07-31 22:45:00')
+  },
+  {
+    id: 2,
+    author: {
+      avatarUrl: 'https://github.com/vinibcandido.png',
+      name: 'Vinicius Candido',
+      role: 'Back-end developer'
+    },
+    content: [
+      {type: 'paragraph', content: 'Fala galeraa 👋'},
+      {type: 'paragraph', content: 'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀'},
+      {type: 'link', content: '👉 jane.design/doctorcare'}
+    ],
+    publishAt: new Date('2023-08-01 17:58:00')
+  },
+]
+
 export function App() {
   return (
     <>
@@ -10,16 +41,15 @@ export function App() {
       <div className={style.wrapper}>
         <Sidebar />
         <main>
-          <Post
-            avatar='https://github.com/brunoknop.png'
-            author='Bruno Gabriel Knop'
-            content='Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora voluptates temporibus eaque delectus sed, optio odio accusantium inventore explicabo aliquid rem, laborum quis deserunt impedit facilis! Ducimus facere voluptas dolorum!'
-          />
-          <Post
-            avatar='https://github.com/vinibcandido.png'
-            author='Vinicius Candido'
-            content='Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora voluptates temporibus eaque delectus sed, optio odio accusantium inventore explicabo aliquid rem, laborum quis deserunt impedit facilis! Ducimus facere voluptas dolorum!'
-          />
+          {posts.map(post => {
+            return (
+              <Post 
+                author={post.author}
+                content={post.content}
+                publishedAt={post.publishAt}
+              />
+            )
+          })}
         </main>
       </div>
     </>
