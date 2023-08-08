@@ -1,8 +1,37 @@
+import { format, formatDistanceToNow } from 'date-fns';
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
+import ptBr from 'date-fns/locale/pt-BR';
 import styles from './Post.module.css';
+import { useState } from 'react';
+
+const comments = [ ,3]
 
 export function Post({author, content, publishedAt}){
+
+  const [comments, setComments] = useState([])
+  const [newCommentText, setNewCommentText] = useState('')
+  
+  const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
+    locale: ptBr,
+  })
+  
+  const publishedDateFormattedFromNow = formatDistanceToNow(publishedAt, {
+    locale: ptBr,
+    addSuffix: true
+  })
+
+  function handleCreateNewComment(){
+    if(newCommentText) {
+      setComments([...comments, newCommentText])
+    }
+    setNewCommentText('')
+  }
+
+  function handleNewCommentText() {
+    setNewCommentText(event.target.value)
+  }
+
   return (
     <article className={styles.post}>
       <header className={styles.header}>
@@ -13,7 +42,7 @@ export function Post({author, content, publishedAt}){
             <span>{author.role}</span>
           </div>
         </div>
-        <time title='24 de maio as 08:00' dateTime='2023-05-24 08:00:00'>Publicado a 1 hora</time>
+        <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>{publishedDateFormattedFromNow}</time>
       </header>
 
       <div className={styles.content}>
@@ -27,18 +56,23 @@ export function Post({author, content, publishedAt}){
         })}
       </div>
 
-      <form className={styles.commentForm}>
+      <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe o seu feedback:</strong>
-        <textarea placeHolder='Deixe um comentário'/>
+        <textarea
+          onChange={handleNewCommentText} 
+          name='comment'
+          placeHolder='Deixe um comentário'
+          value={newCommentText}
+        />
         <footer>
           <button type='submit'>Comentar</button>
         </footer>
       </form>
 
       <div className={styles.commentList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {comments.map(comment => {
+          return <Comment content={comment}/>
+        })}
       </div>
     </article>
   )
