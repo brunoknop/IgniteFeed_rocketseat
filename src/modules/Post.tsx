@@ -3,41 +3,64 @@ import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import ptBr from 'date-fns/locale/pt-BR';
 import styles from './Post.module.css';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react';
 
-export function Post({author, content, publishedAt}){
 
-  const [comments, setComments] = useState([])
+interface Author {
+  name: string;
+  role: string;
+  avatarUrl: string;
+}
+
+interface Content {
+  content: string
+  type: 'paragraph' | 'link';
+}
+
+export interface PostType {
+  id: number
+  author: Author;
+  publishedAt: Date;
+  content: Content[];
+}
+
+interface PostProps {
+  post: PostType
+}
+
+export function Post({post}: PostProps){
+
+  const [comments, setComments] = useState(['primeiro comentário'])
   const [newCommentText, setNewCommentText] = useState('')
   
-  const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
+  const publishedDateFormatted = format(post.publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
     locale: ptBr,
   })
   
-  const publishedDateFormattedFromNow = formatDistanceToNow(publishedAt, {
+  const publishedDateFormattedFromNow = formatDistanceToNow(post.publishedAt, {
     locale: ptBr,
     addSuffix: true
   })
 
-  function handleCreateNewComment(){
+  function handleCreateNewComment(event: FormEvent){
     event.preventDefault()
     setComments([...comments, newCommentText])
     setNewCommentText('')
   }
 
-  function handleNewCommentText() {
+  function handleNewCommentText(event: ChangeEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity('')
     setNewCommentText(event.target.value)
   }
 
-  function deleteComment(deletedComment) {
+  function deleteComment(deletedComment: string) {
     var newCommentListWithoutDeletedOne = comments.filter(comment => {
       return comment !== deletedComment
     })
     setComments(newCommentListWithoutDeletedOne)
   }
 
-  function handleNewCommentInvalid(){
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>){
     event.target.setCustomValidity('Este campo é obrigatório!')
   }
 
@@ -47,17 +70,17 @@ export function Post({author, content, publishedAt}){
     <article className={styles.post}>
       <header className={styles.header}>
         <div className={styles.author}>
-          <Avatar img={author.avatarUrl} />
+          <Avatar src={post.author.avatarUrl} />
           <div className={styles.authorInfo}>
-            <strong>{author.name}</strong>
-            <span>{author.role}</span>
+            <strong>{post.author.name}</strong>
+            <span>{post.author.role}</span>
           </div>
         </div>
-        <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>{publishedDateFormattedFromNow}</time>
+        <time title={publishedDateFormatted} dateTime={post.publishedAt.toISOString()}>{publishedDateFormattedFromNow}</time>
       </header>
 
       <div className={styles.content}>
-        {content.map(text => {
+        {post.content.map(text => {
           if (text.type == 'paragraph') {
             return <p key={text.content}>{text.content}</p>
           }
