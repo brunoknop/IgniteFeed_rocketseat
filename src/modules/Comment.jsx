@@ -1,8 +1,20 @@
 import { Trash, HandsClapping } from '@phosphor-icons/react'
 import styles from './Comment.module.css';
 import { Avatar } from './Avatar';
+import { useState } from 'react';
 
-export function Comment ({ content }) {
+export function Comment ({ content, onDeleteComment}) {
+  
+  const [clapCount, setClapCount] = useState(0);
+  
+  function handleDeleteComment() {
+    onDeleteComment(content);
+  }
+
+  function handleAddNewClap(){
+    setClapCount(clapCount + 1)
+  }
+
   return (
     <div className={styles.comment}>
       <Avatar hasBorder={false} img="https://github.com/vinibcandido.png"/>
@@ -13,16 +25,16 @@ export function Comment ({ content }) {
               <strong>Vinicius Candido</strong>
               <time title='31 de Julho de 2023' dateTime='2023-07-31 08:00:00'>Cerca de 2h atrás</time>
             </div>
-            <button>
+            <button onClick={handleDeleteComment}>
               <Trash size={24}/>
             </button>
           </header>
           <p>{content}</p>
         </div>
         <footer>
-          <button>
+          <button onClick={handleAddNewClap}>
             <HandsClapping size={20}/>
-            Aplaudir <span>33</span>
+            Aplaudir <span>{clapCount}</span>
           </button>
         </footer>
       </div>
